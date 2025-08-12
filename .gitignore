@@ -1,0 +1,29 @@
+build/青龙京东助手/青龙京东助手.pkg
+build/青龙京东助手/Analysis-00.toc
+build/青龙京东助手/base_library.zip
+build/青龙京东助手/BUNDLE-00.toc
+build/青龙京东助手/EXE-00.toc
+build/青龙京东助手/PKG-00.toc
+build/青龙京东助手/PYZ-00.pyz
+build/青龙京东助手/PYZ-00.toc
+build/青龙京东助手/warn-青龙京东助手.txt
+build/青龙京东助手/xref-青龙京东助手.html
+build/青龙京东助手/localpycs/pyimod01_archive.pyc
+build/青龙京东助手/localpycs/pyimod02_importers.pyc
+build/青龙京东助手/localpycs/pyimod03_ctypes.pyc
+build/青龙京东助手/localpycs/struct.pyc
+dist/青龙京东助手
+dist/青龙京东助手.app/Contents/Info.plist
+dist/青龙京东助手.app/Contents/MacOS/青龙京东助手
+dist/青龙京东助手.app/Contents/Resources/icon-windowed.icns
+dist/青龙京东助手.app/Contents/_CodeSignature/CodeResources
+
+# IDE相关文件
+.cursor/
+.vscode/
+
+# 构建产物
+*.dmg
+*.spec
+build/
+dist/
