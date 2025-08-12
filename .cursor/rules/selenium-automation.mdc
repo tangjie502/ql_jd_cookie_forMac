@@ -1,0 +1,62 @@
+---
+description: Selenium浏览器自动化开发指南
+---
+
+# Selenium浏览器自动化指南
+
+## WebDriver管理
+- 使用`webdriver-manager`自动管理ChromeDriver版本
+- 避免手动下载和配置驱动程序
+- 在应用退出时正确关闭WebDriver实例
+
+```python
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.service import Service as ChromeService
+
+service = ChromeService(executable_path=ChromeDriverManager().install())
+driver = webdriver.Chrome(service=service)
+```
+
+## 浏览器配置
+- 根据需要配置Chrome选项
+- 考虑添加`--no-sandbox`选项提高稳定性
+- 可选择无头模式进行后台操作
+
+## Cookie操作
+- 使用`driver.get_cookies()`获取所有Cookie
+- 按name字段筛选特定Cookie
+- 验证关键Cookie是否存在
+
+```python
+cookies = driver.get_cookies()
+for cookie in cookies:
+    if cookie['name'] == 'pt_key':
+        pt_key = cookie['value']
+```
+
+## 页面导航
+- 使用完整URL进行导航
+- 等待页面加载完成再进行操作
+- 处理网络超时和连接失败
+
+## 错误处理
+- 捕获WebDriverException异常
+- 提供用户友好的错误信息
+- 检查Chrome浏览器是否已安装
+
+## 资源清理
+- 在应用程序退出时关闭浏览器
+- 处理意外中断的情况
+- 避免僵尸进程的产生
+
+```python
+def on_closing(self):
+    if self.driver:
+        self.driver.quit()  # 使用quit()而非close()
+    self.destroy()
+```
+
+## 安全考虑
+- 不要在自动化脚本中硬编码敏感信息
+- 用户手动登录，避免自动输入账密
+- 尊重网站的robots.txt和使用条款

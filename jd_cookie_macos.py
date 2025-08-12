@@ -114,7 +114,7 @@ class App(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("🚀 青龙京东助手 v2.0 - macOS")
-        self.geometry("850x650")
+        self.geometry("850x900")
         self.resizable(True, True)  # 允许调整窗口大小
         self.driver = None
         
@@ -125,8 +125,8 @@ class App(tk.Tk):
         except:
             pass
         
-        # 配置主题颜色
-        self.configure(bg='#f8f9fa')
+        # 配置暗色主题颜色
+        self.configure(bg='#1a1a1a')
         
         # --- 修改的部分 ---
         self.config_file_path = _get_config_path()
@@ -136,236 +136,189 @@ class App(tk.Tk):
         self.cookie_status = "未获取"
         # -----------------
 
-        # 创建主框架 - 现代简约风格
-        main_frame = tk.Frame(self, bg='#f8f9fa', padx=20, pady=15)
+        # 创建主框架 - 暗色专业风格
+        main_frame = tk.Frame(self, bg='#1a1a1a', padx=20, pady=15)
         main_frame.pack(fill=tk.BOTH, expand=True)
 
-        # 应用标题区域
-        title_frame = tk.Frame(main_frame, bg='#f8f9fa', height=60)
+        # 应用标题区域 - 暗黑渐变
+        title_frame = tk.Frame(main_frame, bg='#2d2d2d', height=60)
         title_frame.pack(fill=tk.X, pady=(0, 20))
         title_frame.pack_propagate(False)
         
-        title_label = tk.Label(title_frame, text="青龙京东助手 v2.0", 
+        # 创建渐变标题背景
+        gradient_frame = tk.Frame(title_frame, height=60)
+        gradient_frame.pack(fill=tk.X)
+        gradient_frame.configure(bg='#fa709a')  # 粉色到黄色渐变的起始色
+        
+        title_label = tk.Label(gradient_frame, text="青龙助手 - forMac", 
                               font=('SF Pro Display', 24, 'bold'),
-                              fg='#2c3e50', bg='#f8f9fa')
+                              fg='#333333', bg='#fa709a')
         title_label.pack(expand=True)
         
         # 状态指示器区域
-        status_frame = tk.Frame(main_frame, bg='#ffffff', relief='flat', bd=0)
+        status_frame = tk.Frame(main_frame, bg='#2d2d2d', relief='flat', bd=1, highlightbackground='#404040')
         status_frame.pack(fill=tk.X, pady=(0, 20))
         
         # 创建状态指示器
         self.create_status_indicators(status_frame)
 
-        # 青龙配置部分 - 现代卡片样式
-        config_card = tk.Frame(main_frame, bg='#ffffff', relief='flat', bd=0)
+        # 青龙配置部分 - 暗色卡片样式
+        config_card = tk.Frame(main_frame, bg='#2d2d2d', relief='flat', bd=1, highlightbackground='#404040')
         config_card.pack(fill=tk.X, pady=(0, 15))
         
-        # 配置卡片标题
-        config_title_frame = tk.Frame(config_card, bg='#667eea', height=45)
-        config_title_frame.pack(fill=tk.X)
-        config_title_frame.pack_propagate(False)
+        # 配置卡片左边框装饰
+        left_border = tk.Frame(config_card, bg='#fa709a', width=4)
+        left_border.pack(side=tk.LEFT, fill=tk.Y)
         
-        config_title = tk.Label(config_title_frame, text="🔗 青龙面板配置", 
+        # 配置内容区域
+        config_content = tk.Frame(config_card, bg='#2d2d2d')
+        config_content.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        
+        # 配置标题
+        config_title = tk.Label(config_content, text="青龙面板配置", 
                                font=('SF Pro Display', 14, 'bold'),
-                               fg='white', bg='#667eea')
-        config_title.pack(expand=True)
+                               fg='#fa709a', bg='#2d2d2d')
+        config_title.pack(anchor='w', padx=15, pady=(15, 10))
         
         # 配置表单区域
-        config_form = tk.Frame(config_card, bg='#ffffff', padx=20, pady=20)
-        config_form.pack(fill=tk.X)
+        config_form = tk.Frame(config_content, bg='#2d2d2d')
+        config_form.pack(fill=tk.X, padx=15, pady=(0, 15))
 
         # URL配置
-        url_label = tk.Label(config_form, text="🌐 青龙面板地址", 
-                            font=('SF Pro Display', 12, 'bold'),
-                            fg='#495057', bg='#ffffff')
-        url_label.pack(anchor='w', pady=(0, 5))
-        
-        self.ql_url = tk.Entry(config_form, font=('SF Pro Display', 11),
-                              bg='#f8f9fa', relief='flat', bd=0,
-                              highlightthickness=1, highlightcolor='#667eea',
-                              highlightbackground='#dee2e6')
-        self.ql_url.pack(fill=tk.X, pady=(0, 15), ipady=8)
+        self.ql_url = tk.Entry(config_form, font=('Monaco', 11),
+                              bg='#3a3a3a', fg='#e0e0e0', relief='flat', bd=0,
+                              highlightthickness=1, highlightcolor='#fa709a',
+                              highlightbackground='#555', insertbackground='#e0e0e0')
+        self.ql_url.pack(fill=tk.X, pady=(0, 10), ipady=10)
+        self.ql_url.insert(0, "http://面板地址:5700")
+        self.ql_url.bind('<FocusIn>', lambda e: self.clear_placeholder(e, "http://面板地址:5700"))
 
         # Client ID和Secret - 并排布局
-        credentials_frame = tk.Frame(config_form, bg='#ffffff')
-        credentials_frame.pack(fill=tk.X, pady=(0, 15))
+        credentials_frame = tk.Frame(config_form, bg='#2d2d2d')
+        credentials_frame.pack(fill=tk.X, pady=(0, 10))
         
         # Client ID
-        client_id_frame = tk.Frame(credentials_frame, bg='#ffffff')
-        client_id_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(0, 10))
-        
-        client_id_label = tk.Label(client_id_frame, text="🆔 Client ID", 
-                                  font=('SF Pro Display', 12, 'bold'),
-                                  fg='#495057', bg='#ffffff')
-        client_id_label.pack(anchor='w', pady=(0, 5))
-        
-        self.ql_client_id = tk.Entry(client_id_frame, font=('SF Pro Display', 11),
-                                    bg='#f8f9fa', relief='flat', bd=0,
-                                    highlightthickness=1, highlightcolor='#667eea',
-                                    highlightbackground='#dee2e6')
-        self.ql_client_id.pack(fill=tk.X, ipady=8)
+        self.ql_client_id = tk.Entry(credentials_frame, font=('Monaco', 11),
+                                    bg='#3a3a3a', fg='#e0e0e0', relief='flat', bd=0,
+                                    highlightthickness=1, highlightcolor='#fa709a',
+                                    highlightbackground='#555', insertbackground='#e0e0e0')
+        self.ql_client_id.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(0, 5), ipady=10)
+        self.ql_client_id.insert(0, "Client ID")
+        self.ql_client_id.bind('<FocusIn>', lambda e: self.clear_placeholder(e, "Client ID"))
         
         # Client Secret
-        client_secret_frame = tk.Frame(credentials_frame, bg='#ffffff')
-        client_secret_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(10, 0))
-        
-        client_secret_label = tk.Label(client_secret_frame, text="🔐 Client Secret", 
-                                      font=('SF Pro Display', 12, 'bold'),
-                                      fg='#495057', bg='#ffffff')
-        client_secret_label.pack(anchor='w', pady=(0, 5))
-        
-        self.ql_client_secret = tk.Entry(client_secret_frame, font=('SF Pro Display', 11),
-                                        bg='#f8f9fa', relief='flat', bd=0, show='*',
-                                        highlightthickness=1, highlightcolor='#667eea',
-                                        highlightbackground='#dee2e6')
-        self.ql_client_secret.pack(fill=tk.X, ipady=8)
-        
-        # 保存配置按钮
-        save_btn_frame = tk.Frame(config_form, bg='#ffffff')
-        save_btn_frame.pack(fill=tk.X, pady=(10, 0))
-        
-        self.save_ql_button = tk.Button(save_btn_frame, text="💾 保存配置", 
-                                       command=self.save_config,
-                                       font=('SF Pro Display', 11, 'bold'),
-                                       bg='#28a745', fg='white',
-                                       relief='flat', bd=0, cursor='hand2',
-                                       activebackground='#218838',
-                                       activeforeground='white')
-        self.save_ql_button.pack(anchor='e', padx=0, pady=0, ipady=8, ipadx=15)
+        self.ql_client_secret = tk.Entry(credentials_frame, font=('Monaco', 11),
+                                        bg='#3a3a3a', fg='#e0e0e0', relief='flat', bd=0, show='*',
+                                        highlightthickness=1, highlightcolor='#fa709a',
+                                        highlightbackground='#555', insertbackground='#e0e0e0')
+        self.ql_client_secret.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(5, 0), ipady=10)
+        self.ql_client_secret.insert(0, "Client Secret")
+        self.ql_client_secret.bind('<FocusIn>', lambda e: self.clear_placeholder(e, "Client Secret"))
 
-        # 操作部分 - 现代按钮卡片
-        action_card = tk.Frame(main_frame, bg='#ffffff', relief='flat', bd=0)
+        # 操作部分 - 暗色按钮卡片
+        action_card = tk.Frame(main_frame, bg='#2d2d2d', relief='flat', bd=1, highlightbackground='#404040')
         action_card.pack(fill=tk.X, pady=(0, 15))
         
-        # 操作卡片标题
-        action_title_frame = tk.Frame(action_card, bg='#764ba2', height=45)
-        action_title_frame.pack(fill=tk.X)
-        action_title_frame.pack_propagate(False)
+        # 操作卡片左边框装饰
+        action_left_border = tk.Frame(action_card, bg='#fee140', width=4)
+        action_left_border.pack(side=tk.LEFT, fill=tk.Y)
         
-        action_title = tk.Label(action_title_frame, text="⚡ 快速操作", 
+        # 操作内容区域
+        action_content = tk.Frame(action_card, bg='#2d2d2d')
+        action_content.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        
+        # 操作标题
+        action_title = tk.Label(action_content, text="操作中心", 
                                font=('SF Pro Display', 14, 'bold'),
-                               fg='white', bg='#764ba2')
-        action_title.pack(expand=True)
+                               fg='#fee140', bg='#2d2d2d')
+        action_title.pack(anchor='w', padx=15, pady=(15, 10))
         
         # 操作按钮区域
-        action_buttons_frame = tk.Frame(action_card, bg='#ffffff', padx=20, pady=20)
-        action_buttons_frame.pack(fill=tk.X)
+        action_buttons_frame = tk.Frame(action_content, bg='#2d2d2d')
+        action_buttons_frame.pack(fill=tk.X, padx=15, pady=(0, 15))
         
-        # 现代化按钮样式
+        # 暗色按钮样式
         button_style = {
-            'font': ('SF Pro Display', 12, 'bold'),
+            'font': ('SF Pro Display', 11, 'bold'),
             'relief': 'flat',
             'bd': 0,
-            'cursor': 'hand2',
-            'pady': 12,
-            'padx': 20
+            'cursor': 'hand2'
         }
         
-        self.login_button = tk.Button(action_buttons_frame, text="🌐 打开京东登录", 
+        self.login_button = tk.Button(action_buttons_frame, text="🌐 登录", 
                                      command=self.open_jd_login,
-                                     bg='#007bff', fg='white',
-                                     activebackground='#0056b3',
+                                     bg='#fa709a', fg='white',
+                                     activebackground='#f85d92',
                                      activeforeground='white',
                                      **button_style)
-        self.login_button.pack(side=tk.LEFT, padx=(0, 10), fill=tk.BOTH, expand=True)
+        self.login_button.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(0, 5), ipady=10)
 
-        self.get_cookie_button = tk.Button(action_buttons_frame, text="🍪 获取Cookie", 
+        self.get_cookie_button = tk.Button(action_buttons_frame, text="🍪 获取", 
                                           command=self.get_cookies,
-                                          bg='#28a745', fg='white',
-                                          activebackground='#218838',
-                                          activeforeground='white',
+                                          bg='#fee140', fg='#333',
+                                          activebackground='#fed93c',
+                                          activeforeground='#333',
                                           **button_style)
-        self.get_cookie_button.pack(side=tk.LEFT, padx=(5, 5), fill=tk.BOTH, expand=True)
+        self.get_cookie_button.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(5, 5), ipady=10)
 
-        self.send_to_ql_button = tk.Button(action_buttons_frame, text="🚀 发送到青龙", 
+        self.send_to_ql_button = tk.Button(action_buttons_frame, text="🚀 发送", 
                                           command=self.send_to_ql,
-                                          bg='#17a2b8', fg='white',
-                                          activebackground='#138496',
+                                          bg='#4facfe', fg='white',
+                                          activebackground='#3a96fd',
                                           activeforeground='white',
                                           **button_style)
-        self.send_to_ql_button.pack(side=tk.LEFT, padx=(10, 0), fill=tk.BOTH, expand=True)
+        self.send_to_ql_button.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(5, 0), ipady=10)
 
-        # Cookie 显示部分 - 现代卡片
-        cookie_card = tk.Frame(main_frame, bg='#ffffff', relief='flat', bd=0)
-        cookie_card.pack(fill=tk.X, pady=(0, 15))
+        # 系统监控部分 - 暗色卡片
+        monitor_card = tk.Frame(main_frame, bg='#2d2d2d', relief='flat', bd=1, highlightbackground='#404040')
+        monitor_card.pack(fill=tk.BOTH, expand=True)
         
-        # Cookie卡片标题
-        cookie_title_frame = tk.Frame(cookie_card, bg='#ffc107', height=45)
-        cookie_title_frame.pack(fill=tk.X)
-        cookie_title_frame.pack_propagate(False)
+        # 监控卡片左边框装饰
+        monitor_left_border = tk.Frame(monitor_card, bg='#4facfe', width=4)
+        monitor_left_border.pack(side=tk.LEFT, fill=tk.Y)
         
-        cookie_title = tk.Label(cookie_title_frame, text="🍪 Cookie信息", 
-                               font=('SF Pro Display', 14, 'bold'),
-                               fg='white', bg='#ffc107')
-        cookie_title.pack(expand=True)
+        # 监控内容区域
+        monitor_content = tk.Frame(monitor_card, bg='#2d2d2d')
+        monitor_content.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         
-        # Cookie信息区域
-        cookie_info_frame = tk.Frame(cookie_card, bg='#ffffff', padx=20, pady=20)
-        cookie_info_frame.pack(fill=tk.X)
+        # 监控标题和状态
+        monitor_header = tk.Frame(monitor_content, bg='#2d2d2d', padx=15, pady=15)
+        monitor_header.pack(fill=tk.X)
         
-        # 用户状态显示
-        user_info_frame = tk.Frame(cookie_info_frame, bg='#f8f9fa', padx=15, pady=10)
-        user_info_frame.pack(fill=tk.X, pady=(0, 15))
+        monitor_title = tk.Label(monitor_header, text="系统监控", 
+                                font=('SF Pro Display', 14, 'bold'),
+                                fg='#4facfe', bg='#2d2d2d')
+        monitor_title.pack(side=tk.LEFT)
         
-        user_title = tk.Label(user_info_frame, text="👤 当前用户状态", 
-                             font=('SF Pro Display', 12, 'bold'),
-                             fg='#495057', bg='#f8f9fa')
-        user_title.pack(anchor='w')
+        # 右侧状态信息
+        status_info = tk.Frame(monitor_header, bg='#2d2d2d')
+        status_info.pack(side=tk.RIGHT)
         
-        user_status_frame = tk.Frame(user_info_frame, bg='#f8f9fa')
-        user_status_frame.pack(fill=tk.X, pady=(5, 0))
+        # 连接状态
+        connect_status = tk.Label(status_info, text="连接状态:", 
+                                 font=('SF Pro Display', 10), 
+                                 fg='#666', bg='#2d2d2d')
+        connect_status.pack(side=tk.LEFT)
         
-        tk.Label(user_status_frame, text="用户名:", 
-                font=('SF Pro Display', 11), fg='#6c757d', bg='#f8f9fa').pack(side=tk.LEFT)
+        connect_indicator = tk.Label(status_info, text="● 未连接", 
+                                    font=('SF Pro Display', 10), 
+                                    fg='#dc3545', bg='#2d2d2d')
+        connect_indicator.pack(side=tk.LEFT, padx=(5, 20))
         
-        self.pin_label = tk.Label(user_status_frame, text="N/A", 
-                                 font=('SF Pro Display', 11, 'bold'),
-                                 fg='#007bff', bg='#f8f9fa')
+        # 用户状态
+        user_status_label = tk.Label(status_info, text="用户:", 
+                                    font=('SF Pro Display', 10), 
+                                    fg='#666', bg='#2d2d2d')
+        user_status_label.pack(side=tk.LEFT)
+        
+        self.pin_label = tk.Label(status_info, text="N/A", 
+                                 font=('SF Pro Display', 10, 'bold'),
+                                 fg='#ffc107', bg='#2d2d2d')
         self.pin_label.pack(side=tk.LEFT, padx=(5, 0))
         
-        status_indicator = tk.Label(user_status_frame, text="●", 
-                                   font=('SF Pro Display', 16),
-                                   fg='#6c757d', bg='#f8f9fa')
-        status_indicator.pack(side=tk.RIGHT)
-        
-        tk.Label(user_status_frame, text="Cookie状态:", 
-                font=('SF Pro Display', 11), fg='#6c757d', bg='#f8f9fa').pack(side=tk.RIGHT, padx=(0, 5))
-        
-        # Cookie文本显示区域
-        cookie_text_frame = tk.Frame(cookie_info_frame, bg='#ffffff')
-        cookie_text_frame.pack(fill=tk.X)
-        
-        tk.Label(cookie_text_frame, text="📋 Cookie内容:", 
-                font=('SF Pro Display', 11, 'bold'), 
-                fg='#495057', bg='#ffffff').pack(anchor='w', pady=(0, 5))
-        
-        self.cookie_text = tk.Text(cookie_text_frame, height=4, 
-                                  font=('Monaco', 10),
-                                  bg='#f8f9fa', fg='#495057',
-                                  relief='flat', bd=0,
-                                  highlightthickness=1,
-                                  highlightcolor='#ffc107',
-                                  highlightbackground='#dee2e6')
-        self.cookie_text.pack(fill=tk.X, pady=(0, 0), ipady=5)
-
-        # 日志部分 - 现代卡片
-        log_card = tk.Frame(main_frame, bg='#ffffff', relief='flat', bd=0)
-        log_card.pack(fill=tk.BOTH, expand=True)
-        
-        # 日志卡片标题
-        log_title_frame = tk.Frame(log_card, bg='#6f42c1', height=45)
-        log_title_frame.pack(fill=tk.X)
-        log_title_frame.pack_propagate(False)
-        
-        log_title = tk.Label(log_title_frame, text="📝 操作日志", 
-                            font=('SF Pro Display', 14, 'bold'),
-                            fg='white', bg='#6f42c1')
-        log_title.pack(expand=True)
-        
         # 日志内容区域
-        log_content_frame = tk.Frame(log_card, bg='#ffffff', padx=20, pady=20)
-        log_content_frame.pack(fill=tk.BOTH, expand=True)
+        log_content_frame = tk.Frame(monitor_content, bg='#2d2d2d')
+        log_content_frame.pack(fill=tk.BOTH, expand=True, padx=15, pady=(0, 15))
         
         self.log_area = scrolledtext.ScrolledText(log_content_frame, 
                                                  wrap=tk.WORD, height=8,
@@ -375,6 +328,10 @@ class App(tk.Tk):
                                                  highlightthickness=0,
                                                  insertbackground='#00ff00')
         self.log_area.pack(fill=tk.BOTH, expand=True)
+        
+        # Cookie 文本框（隐藏但保留功能）
+        self.cookie_text = tk.Text(self, height=1, width=1)
+        self.cookie_text.pack_forget()  # 隐藏但保留引用
 
         self.load_config()
         self.protocol("WM_DELETE_WINDOW", self.on_closing)
@@ -388,20 +345,26 @@ class App(tk.Tk):
         pos_y = (self.winfo_screenheight() // 2) - (height // 2)
         self.geometry(f'{width}x{height}+{pos_x}+{pos_y}')
     
+    def clear_placeholder(self, event, placeholder_text):
+        """清除输入框占位符文本"""
+        widget = event.widget
+        if widget.get() == placeholder_text:
+            widget.delete(0, tk.END)
+    
     def create_status_indicators(self, parent_frame):
-        """创建现代化的状态指示器"""
+        """创建暗色主题的状态指示器"""
         # 状态指示器容器
-        indicators_frame = tk.Frame(parent_frame, bg='#ffffff', padx=20, pady=15)
+        indicators_frame = tk.Frame(parent_frame, bg='#2d2d2d', padx=20, pady=15)
         indicators_frame.pack(fill=tk.X)
         
         # 标题
         status_title = tk.Label(indicators_frame, text="📊 系统状态", 
                                font=('SF Pro Display', 14, 'bold'),
-                               fg='#2c3e50', bg='#ffffff')
+                               fg='#e0e0e0', bg='#2d2d2d')
         status_title.pack(anchor='w', pady=(0, 10))
         
         # 状态指示器网格
-        status_grid = tk.Frame(indicators_frame, bg='#ffffff')
+        status_grid = tk.Frame(indicators_frame, bg='#2d2d2d')
         status_grid.pack(fill=tk.X)
         
         # 创建三个状态指示器
@@ -410,30 +373,30 @@ class App(tk.Tk):
         self.create_single_indicator(status_grid, "Cookie状态", "未获取", "#6c757d", 2)
     
     def create_single_indicator(self, parent, title, status, color, column):
-        """创建单个状态指示器"""
-        indicator_frame = tk.Frame(parent, bg='#ffffff')
+        """创建单个暗色主题状态指示器"""
+        indicator_frame = tk.Frame(parent, bg='#2d2d2d')
         indicator_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(0 if column == 0 else 10, 0))
         
         # 状态圆圈
-        circle_frame = tk.Frame(indicator_frame, bg='#ffffff', height=50)
+        circle_frame = tk.Frame(indicator_frame, bg='#2d2d2d', height=50)
         circle_frame.pack(fill=tk.X)
         circle_frame.pack_propagate(False)
         
         status_circle = tk.Label(circle_frame, text="●", 
                                 font=('SF Pro Display', 40),
-                                fg=color, bg='#ffffff')
+                                fg=color, bg='#2d2d2d')
         status_circle.pack(expand=True)
         
         # 状态标题
         title_label = tk.Label(indicator_frame, text=title,
                               font=('SF Pro Display', 11, 'bold'),
-                              fg='#495057', bg='#ffffff')
+                              fg='#e0e0e0', bg='#2d2d2d')
         title_label.pack(pady=(5, 2))
         
         # 状态值
         status_label = tk.Label(indicator_frame, text=status,
                                font=('SF Pro Display', 10),
-                               fg='#6c757d', bg='#ffffff')
+                               fg='#aaa', bg='#2d2d2d')
         status_label.pack()
         
         # 存储引用以便更新
@@ -483,21 +446,37 @@ class App(tk.Tk):
 
     def save_config(self):
         """保存配置并更新状态"""
+        # 获取配置值，过滤掉占位符文本
+        url = self.ql_url.get()
+        client_id = self.ql_client_id.get()
+        client_secret = self.ql_client_secret.get()
+        
+        # 过滤占位符
+        if url == "http://面板地址:5700":
+            url = ""
+        if client_id == "Client ID":
+            client_id = ""
+        if client_secret == "Client Secret":
+            client_secret = ""
+            
         config = {
-            "ql_url": self.ql_url.get(),
-            "ql_client_id": self.ql_client_id.get(),
-            "ql_client_secret": self.ql_client_secret.get()
+            "ql_url": url,
+            "ql_client_id": client_id,
+            "ql_client_secret": client_secret
         }
+        
         try:
             with open(self.config_file_path, "w") as f:
                 json.dump(config, f, indent=4)
             
-            self.log(f"配置已保存到: {self.config_file_path}", "SUCCESS")
+            self.log(f"配置已保存", "SUCCESS")
             
             # 更新连接状态
             if config["ql_url"] and config["ql_client_id"] and config["ql_client_secret"]:
                 self.update_status_indicator(0, "已配置", "#28a745")
                 self.connection_status = "已配置"
+            else:
+                self.update_status_indicator(0, "待完善", "#ffc107")
             
             messagebox.showinfo("✅ 保存成功", "配置信息已成功保存！")
             
@@ -512,9 +491,18 @@ class App(tk.Tk):
                 with open(self.config_file_path, "r") as f:
                     config = json.load(f)
                 
-                self.ql_url.insert(0, config.get("ql_url", ""))
-                self.ql_client_id.insert(0, config.get("ql_client_id", ""))
-                self.ql_client_secret.insert(0, config.get("ql_client_secret", ""))
+                # 清除占位符并加载实际配置
+                if config.get("ql_url"):
+                    self.ql_url.delete(0, tk.END)
+                    self.ql_url.insert(0, config["ql_url"])
+                
+                if config.get("ql_client_id"):
+                    self.ql_client_id.delete(0, tk.END) 
+                    self.ql_client_id.insert(0, config["ql_client_id"])
+                
+                if config.get("ql_client_secret"):
+                    self.ql_client_secret.delete(0, tk.END)
+                    self.ql_client_secret.insert(0, config["ql_client_secret"])
                 
                 self.log(f"已从本地加载配置文件", "SUCCESS")
                 
@@ -543,7 +531,18 @@ class App(tk.Tk):
                 service = ChromeService(executable_path=ChromeDriverManager().install())
                 
                 self.log("正在启动Chrome浏览器...", "INFO")
-                self.driver = webdriver.Chrome(service=service)
+                
+                # 配置Chrome浏览器选项
+                chrome_options = webdriver.ChromeOptions()
+                # 设置窗口大小和位置
+                # chrome_options.add_argument("--window-size=500,1000")  # 宽度500px，高度1000px
+                chrome_options.add_argument("--window-position=200,100")  # 距离屏幕左边200px，顶部100px
+                
+                # 可选的其他设置（你可以根据需要启用）
+                # chrome_options.add_argument("--start-maximized")  # 最大化启动
+                # chrome_options.add_argument("--force-device-scale-factor=1.1")  # 缩放110%
+                
+                self.driver = webdriver.Chrome(service=service, options=chrome_options)
                 self.driver.get("https://home.m.jd.com/myJd/home.action")
                 
                 self.log("🌐 浏览器已成功打开", "SUCCESS")
@@ -624,9 +623,18 @@ class App(tk.Tk):
 
     def send_to_ql(self):
         """将Cookie发送到青龙面板"""
+        # 获取配置并过滤占位符
         url = self.ql_url.get()
-        client_id = self.ql_client_id.get()
+        client_id = self.ql_client_id.get() 
         client_secret = self.ql_client_secret.get()
+        
+        # 过滤占位符
+        if url == "http://面板地址:5700":
+            url = ""
+        if client_id == "Client ID":
+            client_id = ""
+        if client_secret == "Client Secret":
+            client_secret = ""
         
         cookie_value = self.cookie_text.get('1.0', tk.END).strip()
         pin = self.pin_label.cget("text")
@@ -646,9 +654,9 @@ class App(tk.Tk):
             messagebox.showerror("🍪 Cookie未获取", 
                                "请先获取Cookie！\n\n"
                                "步骤：\n"
-                               "1. 点击 '🌐 打开京东登录'\n"
+                               "1. 点击 '🌐 登录'\n"
                                "2. 在浏览器中登录京东\n"
-                               "3. 点击 '🍪 获取Cookie'")
+                               "3. 点击 '🍪 获取'")
             return
             
         self.log("🚀 开始向青龙面板发送Cookie...", "INFO")

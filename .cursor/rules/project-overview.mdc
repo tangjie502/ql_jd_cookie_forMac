@@ -1,0 +1,42 @@
+---
+alwaysApply: true
+description: 青龙京东Cookie助手项目结构和功能概述
+---
+
+# 青龙京东Cookie助手 for macOS
+
+## 项目概述
+这是一个专为macOS设计的京东Cookie获取工具，用于自动化获取京东账号的Cookie并发送到青龙面板。
+
+## 核心文件
+- [jd_cookie_macos.py](mdc:jd_cookie_macos.py) - 主程序文件，包含GUI界面和核心逻辑
+- [requirements.txt](mdc:requirements.txt) - 项目依赖包列表
+
+## 主要功能模块
+
+### 1. 配置管理
+- 跨平台配置文件存储 (`_get_config_path()`)
+- macOS: `~/Library/Application Support/QinglongJDCookieHelper/config.json`
+- 支持青龙面板URL、Client ID、Client Secret的持久化存储
+
+### 2. 青龙面板API交互 (`QLHelper` 类)
+- 支持青龙面板的OAuth认证
+- 环境变量的增删改查操作
+- 自动检测API版本差异(id vs _id字段)
+
+### 3. 浏览器自动化
+- 使用Selenium WebDriver打开京东登录页面
+- 自动管理ChromeDriver版本
+- 提取pt_key和pt_pin Cookie值
+
+### 4. GUI界面 (`App` 类)
+- 基于Tkinter构建的用户友好界面
+- 实时日志显示
+- 一键式操作流程
+
+## 技术栈
+- **GUI框架**: Tkinter + ttk
+- **浏览器自动化**: Selenium WebDriver
+- **HTTP请求**: requests
+- **驱动管理**: webdriver-manager
+- **多线程**: threading (避免GUI阻塞)
